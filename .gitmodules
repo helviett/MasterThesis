@@ -1,0 +1,3 @@
+[submodule "fefu_thesis"]
+	path = fefu_thesis
+	url = https://github.com/dvfu/fefu_thesis.git
