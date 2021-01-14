@@ -19,6 +19,7 @@
                 "-pdfxe",
                 "-outdir=%OUTDIR%",
                 "-shell-escape",
+                "-output-directory=build",
                 "%DOC%",
             ],
             "env": {
@@ -62,4 +63,5 @@
         "editorRuler.foreground": "#ff4081"
     },
     "editor.minimap.enabled": false,
+    "latex-workshop.latex.outDir": "%DIR_W32%\\build",
 }
