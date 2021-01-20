@@ -55,4 +55,114 @@
             \includegraphics[width=\linewidth, height=.9\textheight, keepaspectratio]{CitrusArchitecture.png}
         \end{figure}
     \end{frame}
+    \begin{frame}
+        \frametitle{Упаковка текстур в атлас}
+        \begin{itemize}
+            \item Жадный алгоритм
+            \item Генерация текстурного меша, полигональная упаковка методами машинного обучения
+        \end{itemize}
+        \begin{figure}
+            \centering
+            \begin{subfigure}[H]{\linewidth}
+                \centering
+                \includegraphics[width=.59\linewidth]{RectangularPacking.png}
+            \end{subfigure}
+            \vskip .5cm
+            \begin{subfigure}[H]{\linewidth}
+                \centering
+                \includegraphics[width=.59\linewidth]{PolygonalPacking.png}
+            \end{subfigure}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Цели и задачи}
+        Цели:
+        % \begin{itemize}
+
+        % \end{itemize}
+        Задачи:
+        % \begin{itemize}
+
+        % \end{itemize}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Этапы полигональной упаковки в атлас}
+        \begin{itemize}
+            \item Трассировка контура
+            \item Аппроксимация контура
+            \item Генерация меша
+            \item Упаковка в атлас
+        \end{itemize}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Трассировка контура}
+        Алгоритм Suzuki Satoshi\cite{SuzukiAlgorithm}
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}[l]{0.50\linewidth}
+                \centering
+                \includegraphics[scale=2]{donutpixel_contour_none.png}
+            \end{subfigure}
+            \begin{subfigure}{0.49\linewidth}
+                \centering
+                \includegraphics[scale=2]{donutpixel_contour_simple.png}
+            \end{subfigure}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Аппроксимация контура}
+        Триангуляция Делоне\cite{Delaunay} -- бекенд для всех операций
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}[l]{0.33\linewidth}
+                \centering
+                \includegraphics[scale=1.5]{donutpixel_approx_start.png}
+            \end{subfigure}
+            \begin{subfigure}{0.33\linewidth}
+                \centering
+                \includegraphics[scale=1.5]{donutpixel_approx_mid.png}
+            \end{subfigure}\begin{subfigure}{0.33\linewidth}
+                \centering
+                \includegraphics[scale=1.5]{donutpixel_approx_end.png}
+            \end{subfigure}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Генерация меша}
+        Winding number (non-zero filling rule)
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=1.5]{donutpixel_mesh.png}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Упаковка в атлас}
+        Генетический алгоритм с локальным поиском (memetic algorithm)
+        Методы локального поиска:
+        \begin{itemize}
+            \item Вставить полигон в пустое место
+            \item Вставить полигон в дырку
+            \item Физика
+        \end{itemize}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Упаковка в атлас}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\linewidth, height=.9\textheight, keepaspectratio]{PackExample.png}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Оставшаяся часть работы}
+        \begin{itemize}
+            \item Интеграция в Citrus (в процессе)
+            \item Выработать критерий остановки аппроксимации
+            \item Разработать алгоритм подбора оптимального размера атласа
+        \end{itemize}
+    \end{frame}
+    \begin{frame} %[allowframebreaks]
+        \frametitle{Список литературы}
+        \bibliographystyle{ugost2008ls}
+        \bibliography{references}
+    \end{frame}
 \end{document}
