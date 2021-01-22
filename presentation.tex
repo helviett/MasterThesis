@@ -18,7 +18,7 @@
 Руководитель:\\
 Старший преподаватель кафедры информатики, математического и компьютерного моделирования\\
 Александр Сергеевич Кленин}
-\date{10 июля 2019}
+\date{}
 \usetheme[progressbar=frametitle, numbering=fraction]{metropolis}
 \makeatletter
         \setlength{\metropolis@progressinheadfoot@linewidth}{2pt}
@@ -76,14 +76,13 @@
     \end{frame}
     \begin{frame}
         \frametitle{Цели и задачи}
-        Цели:
-        % \begin{itemize}
+        Цель: оптимизировать отрисовку в играх (уменьшить overdraw, pixel shader invocations и количество разрыва батчей) и уменьшить размер бандла
 
-        % \end{itemize}
         Задачи:
-        % \begin{itemize}
-
-        % \end{itemize}
+        \begin{itemize}
+            \item Разработать алгоритм полигонизации текстур
+            \item Разработать алгоритм упаковки полигональных текстур в атлас
+        \end{itemize}
     \end{frame}
     \begin{frame}
         \frametitle{Этапы полигональной упаковки в атлас}
@@ -111,7 +110,13 @@
     \end{frame}
     \begin{frame}
         \frametitle{Аппроксимация контура}
-        Триангуляция Делоне\cite{Delaunay} -- бекенд для всех операций
+        Стадии аппроксимации:
+        \begin{itemize}
+            \item Применение минимальных валидных преобразований
+            \item Мердж полигонов
+            \item Удаление дыр
+            \item Растяжение по фрейму
+        \end{itemize}
         \begin{figure}[H]
             \centering
             \begin{subfigure}[l]{0.33\linewidth}
@@ -125,6 +130,36 @@
                 \centering
                 \includegraphics[scale=1.5]{donutpixel_approx_end.png}
             \end{subfigure}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Аппроксимация контура. Типы преобразований}
+        \begin{itemize}
+            \item Удаление вогнутого угла для границы или выпуклого для дырки
+            \item Замена вершины пересечением двух сторон
+            \item Удаление треугольной дырки
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}[H]{\linewidth}
+                \centering
+                \includegraphics[scale=0.9]{images/convex_angle.png}
+                \caption{Удаление вогнутого угла}
+            \end{subfigure}
+            \vskip .5cm
+            \begin{subfigure}[H]{\linewidth}
+                \centering
+                \includegraphics[scale=0.9]{images/sides_intersection.png}
+                \caption{Пересечение 2 сторон}
+            \end{subfigure}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Аппроксимация контура. Детали реализации}
+        Триангуляция Делоне\cite{Delaunay} -- бекенд для всех операций
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.7\linewidth, keepaspectratio]{DelaunayAndVoronoi.png}
         \end{figure}
     \end{frame}
     \begin{frame}

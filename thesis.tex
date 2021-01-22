@@ -1,6 +1,8 @@
 \documentclass{fefu_thesis/cls/fefu}
 
 \usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \author{Терехов Д.Е.}
 \setschool{ШКОЛА ЕСТЕСТВЕННЫХ НАУК ДВФУ}
@@ -97,9 +99,29 @@
             \item Замена вершины пересечением двух сторон;
             \item Удаление треугольной дырки.
         \end{enumerate}
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}[H]{\linewidth}
+                \centering
+                \includegraphics[scale=2]{images/convex_angle.png}
+                \caption{Удаление вогнутого угла}
+            \end{subfigure}
+            \vskip .5cm
+            \begin{subfigure}[H]{\linewidth}
+                \centering
+                \includegraphics[scale=2]{images/sides_intersection.png}
+                \caption{Пересечение 2 сторон}
+            \end{subfigure}
+        \end{figure}
     \subsubsection{Бэкэнд для операций}
     Для проверки преобразований и их выполнения используется триангуляция Делоне\cite{Delaunay} из бакалаврской работы, также сделанной по заказу студии <<Game Forest>> . Жесткими ребрами задаются границы полигонов. Операцией вставки структурных ребер проверяется возможность преобразования. Преобразования применяются при помощи операций вставки и удаления вершин, а также вставки структурных ребер. Данный подход позволил сильно снизить время на разработку и отладку сложного математического кода, для которого было бы сложнее добиться нужной асимптотики.
     \subsection{Упаковка}
+    Генетический алгоритм с локальным поиском (memetic algorithm). Методы локального поиска:
+    \begin{itemize}
+        \item Вставить полигон в пустое место
+        \item Вставить полигон в дырку
+        \item Физика
+    \end{itemize}
     \section{Третий раздел(глава)}
     \section{Заключение}
     \newpage
