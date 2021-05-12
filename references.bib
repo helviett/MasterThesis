@@ -127,14 +127,175 @@
     language     = {english},
 }
 
-@article{VisvalingamWhyatt,
-    title        = {Line generalisation by repeated elimination of points},
-    author       = {Visvalingam, M. and Whyatt, Duncan},
+@article{DouglasPeucker,
+    title        = {Algorithms for the reductions of the number of points required to represent a digitised line or its caricature},
+    journal      = {Cartographica},
+    volume       = {10},
+    number       = {2},
+    pages        = {112-122},
+    year         = {1973},
+    doi          = {https://doi.org/10.3138/FM57-6770-U75U-7727},
+    url          = {https://utpjournals.press/doi/abs/10.3138/FM57-6770-U75U-7727},
+    author       = {Douglas, D.H. and Peucker, T.K.},
+    language     = {english},
+    abstract     = {All digitizing methods, as a general rule, record lines with far more data than is necessary for accurate graphic reproduction or for computer analysis. Two algorithms to reduce the number of points required to represent the line and, if desired, produce caricatures, are presented and compared with the most promising methods so far suggested. Line reduction will form a major part of automated generalization.}
+}
+
+@article{Ramer,
+    title        = {An iterative procedure for the polygonal approximation of plane curves},
+    journal      = {Computer Graphics and Image Processing},
+    volume       = {1},
+    number       = {3},
+    pages        = {244-256},
+    year         = {1972},
+    issn         = {0146-664X},
+    doi          = {https://doi.org/10.1016/S0146-664X(72)80017-0},
+    url          = {https://www.sciencedirect.com/science/article/pii/S0146664X72800170},
+    author       = {Urs Ramer},
+    abstract     = {The approximation of arbitrary two-dimensional curves by polygons is an importanttechnique in image processing. For many applications, the apparent ideal procedure is to represent lines and boundaries by means of polygons with minimum number of vertices and satisfying a given fit criterion. In this paper, an approximation algorithm is presented which uses an iterative method to produce polygons with a small—but not minimum—number of vertices that lie on the given curve. The maximum distance of the curve from the approximating polygon is chosen as the fit criterion. The results obtained justify the abandonment of the minimum-vertices criterion which is computationally much more expensive.}
+}
+
+@online{PolylineSimplification,
+    title        = {Polyline Simplification},
+    url          = {https://www.codeproject.com/Articles/114797/Polyline-Simplification},
+    urldate      = {24.04.2021},
     language     = {english},
 }
 
-@article{DouglasPeucker,
-    title        = {Algorithms for the reductions of the number of points required to represent a digitised line or its caricature},
-    author       = {Douglas, D.H. and Peucker, T.K.},
-    language     = {english},
+@book {VisvalingamWhyatt,
+	title        = {Line generalisation by repeated elimination of the smallest area},
+	abstract     = {CISRG discussion paper ; 10},
+	publicationstatus = {Published},
+	url          = {https://hull-repository.worktribe.com/output/459275},
+	keyword      = {Cartography -- Data processing, Computer science},
+	author       = {Visvalingam, Maheswari and Whyatt, James Duncan}
+}
+
+@inproceedings {Opheim,
+booktitle        = {Eurographics Conference Proceedings},
+editor           = {J. L. Encarnacao},
+title            = {{SMOOTHING A DIGITIZED CURVE BY DATA REDUCTION METHODS}},
+author           = {Opheim, Harald},
+year             = {1981},
+publisher        = {The Eurographics Association},
+ISSN             = {1017-4656},
+DOI              = {10.2312/eg.19811012}
+}
+
+@article{Lang,
+author="LANG, T.",
+title="Rules for the robot draughtsmen",
+journal="The Geographical Magazine",
+ISSN="",
+publisher="",
+year="1969",
+month="",
+volume="42",
+number="1",
+pages="50-51",
+URL="https://ci.nii.ac.jp/naid/10026051218/en/",
+DOI="",
+}
+
+@INPROCEEDINGS{ZhaoSaalfeld,
+    author = {Zhiyuan Zhao and Alan Saalfeld},
+    title = {Linear-time sleeve-fitting polyline simplification algorithms.In},
+    booktitle = {Proceedings of AutoCarto 13},
+    year = {1997},
+    pages = {214--223}
+}
+
+@article{ReumannWitkam,
+  author          = {Reumann, K. and Witkam, A.},
+  title           = {Optimizing curve
+segmentation in computer graphics},
+}
+
+@misc{ThousandWayToPackBin,
+    author = {Jukka Jylänki},
+    title = {A thousand ways to pack the bin -- a practical approach to two-dimensional rectangle bin packing },
+    year = {2010}
+}
+
+@InProceedings{NofitPolygon,
+author="Burke, Edmund
+and Kendall, Graham",
+editor="Parmee, I. C.",
+title="A New Approach to Packing Non-Convex Polygons Using the No Fit Polygon and Meta-Heuristic and Evolutionary Algorithms",
+booktitle="Adaptive Computing in Design and Manufacture V",
+year="2002",
+publisher="Springer London",
+address="London",
+pages="193--204",
+abstract="Earlier work by the authors has presented a method for packing convex polygons, using a construction known as the no fit polygon. Although the method was shown to be successful, it could only deal with convex polygons. This paper addresses the issue by showing how a non-convex, no fit polygon algorithm can (and should) produce better quality solutions. We demonstrate the approach on two test problems that the authors have used in previous work. The new algorithm does, however, have an increased computational complexity. We tackle this by presenting an algorithm that allows the non-convex, no fit polygon to be approximated. This means that much more of the search space can be considered and computational results show that better quality solutions can be achieved, in less time than when using the full no fit polygon algorithm.",
+isbn="978-0-85729-345-9"
+}
+
+@INPROCEEDINGS{NofitPolygon2,
+  author={Domovic, D. and Rolich, T. and Grundler, D. and Bogovic, S.},
+  booktitle={2014 37th International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO)},
+  title={Algorithms for 2D nesting problem based on the no-fit polygon},
+  year={2014},
+  volume={},
+  number={},
+  pages={1094-1099},
+  doi={10.1109/MIPRO.2014.6859732}
+ }
+
+@inproceedings{Fogel1993OnGA,
+  title={On genetic algorithms for the packing of polygons},
+  author={L. Fogel},
+  year={1993}
+}
+
+@article{FireFly,
+author = {Yesodha, R. and Amudha, T},
+year = {2013},
+month = {05},
+pages = {1003-1010},
+title = {Effectiveness of FireFly Algorithm in solving Bin Packing Problem},
+volume = {3}
+}
+
+@InProceedings{AntColony,
+author="Burke, Edmund
+and Kendall, Graham",
+editor="Parmee, I. C.",
+title="A New Approach to Packing Non-Convex Polygons Using the No Fit Polygon and Meta-Heuristic and Evolutionary Algorithms",
+booktitle="Adaptive Computing in Design and Manufacture V",
+year="2002",
+publisher="Springer London",
+address="London",
+pages="193--204",
+abstract="Earlier work by the authors has presented a method for packing convex polygons, using a construction known as the no fit polygon. Although the method was shown to be successful, it could only deal with convex polygons. This paper addresses the issue by showing how a non-convex, no fit polygon algorithm can (and should) produce better quality solutions. We demonstrate the approach on two test problems that the authors have used in previous work. The new algorithm does, however, have an increased computational complexity. We tackle this by presenting an algorithm that allows the non-convex, no fit polygon to be approximated. This means that much more of the search space can be considered and computational results show that better quality solutions can be achieved, in less time than when using the full no fit polygon algorithm.",
+isbn="978-0-85729-345-9"
+}
+
+@inproceedings{PSO,
+  TITLE = {{Bin Packing Problem with priorities and incompatibilities using PSO: application in a health care community}},
+  AUTHOR = {Laurent, Arnaud and Klement, Nathalie},
+  URL = {https://hal.archives-ouvertes.fr/hal-02329525},
+  BOOKTITLE = {{9th IFAC Conference on Manufacturing Modelling, Management and Control}},
+  ADDRESS = {Berlin, Germany},
+  PAGES = {2744-2749},
+  YEAR = {2019},
+  MONTH = Aug,
+  PDF = {https://hal.archives-ouvertes.fr/hal-02329525/file/LISPEN_MIM_2019_KLEMENT.pdf},
+  HAL_ID = {hal-02329525},
+  HAL_VERSION = {v1},
+}
+
+@article{JAKOBS1996165,
+    title       = {On genetic algorithms for the packing of polygons},
+    journal         = {European Journal of Operational Research},
+    volume      = {88},
+    number      = {1},
+    pages       = {165-181},
+    year        = {1996},
+    issn        = {0377-2217},
+    doi         = {https://doi.org/10.1016/0377-2217(94)00166-9},
+    url         = {https://www.sciencedirect.com/science/article/pii/0377221794001669},
+    author      = {Stefan Jakobs},
+    keywords        = {Optimization, Genetic algorithms, Mathematical programming, Adaptive processes, Packing problems},
+    abstract        = {A genetic algorithm for placing polygons on a rectangular board is proposed. The algorithm is improved by combination with deterministic methods.}
 }

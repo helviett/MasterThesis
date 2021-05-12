@@ -13,9 +13,9 @@
 
 \DeclareMathOperator{\sech}{sech}
 \setsansfont{Fira Sans}
-\title{Генерация текстурного меша и упаковка полигональных текстур в атлас}
-\author[Терехов Д.Е.]{Студент группы Б8403а Терехов Дмитрий Евгеньевич\\
-Руководитель:\\
+\title{Полигонизация текстур и упаковка полигональных текстур в атлас}
+\author[Терехов Д.Е.]{Студент группы М9119-09.04.01ИИБД Терехов Дмитрий Евгеньевич\\
+Консультант:\\
 Старший преподаватель кафедры информатики, математического и компьютерного моделирования\\
 Александр Сергеевич Кленин}
 \date{23 февраля 2021}
@@ -95,7 +95,7 @@
     \end{frame}
     \begin{frame}
         \frametitle{Трассировка контура}
-        Алгоритм Suzuki Satoshi\cite{SuzukiAlgorithm}
+        Алгоритм Suzuki Satoshi %\cite{SuzukiAlgorithm}
         \begin{figure}[H]
             \centering
             \begin{subfigure}[l]{0.50\linewidth}
@@ -169,7 +169,7 @@
     \end{frame}
     \begin{frame}
         \frametitle{Аппроксимация контура. Детали реализации}
-        Триангуляция Делоне\cite{Delaunay} -- бекенд для всех операций
+        Триангуляция Делоне -- бекенд для всех операций
         \begin{figure}[H]
             \centering
             \includegraphics[width=0.7\linewidth, keepaspectratio]{DelaunayAndVoronoi.png}
@@ -201,16 +201,16 @@
         \end{figure}
     \end{frame}
     \begin{frame}
-        \frametitle{Оставшаяся часть работы}
+        \frametitle{План работ}
         \begin{itemize}
             \item Интеграция в Citrus (в процессе)
             \item Выработать критерий остановки аппроксимации
             \item Разработать алгоритм подбора оптимального размера атласа
         \end{itemize}
     \end{frame}
-    \begin{frame} %[allowframebreaks]
-        \frametitle{Список литературы}
-        \bibliographystyle{ugost2008ls}
-        \bibliography{references}
-    \end{frame}
+    % \begin{frame} %[allowframebreaks]
+    %     \frametitle{Список литературы}
+    %     \bibliographystyle{ugost2008ls}
+    %     \bibliography{references}
+    % \end{frame}
 \end{document}
