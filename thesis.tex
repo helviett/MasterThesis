@@ -4,6 +4,17 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\newenvironment{algo}[1][]
+  {\begin{algorithm}[#1]
+     \selectlanguage{english}
+     \floatname{algorithm}{Алгоритм}
+  }
+  {\end{algorithm}}
+
+\algdef{SE}[DOWHILE]{Do}{DoWhile}{\algorithmicdo}[1]{\algorithmicwhile\ #1}%
 
 \author{Терехов Д.Е.}
 \setschool{ШКОЛА ЕСТЕСТВЕННЫХ НАУК ДВФУ}
@@ -48,6 +59,7 @@
 
     Для того, чтобы отрисовать изображение на экране, необходимо пройти через графический конвейер. Обязательными и важнейшими этапами графического конвейера являются исполнение вершинного и фрагментного шейдеров, которые запускаются для каждой вершины и каждого фрагмента (пикселя) соответственно. После вызова фрагментного шейдера полученный цвет фрагмента смешивается с цветом фрагмента в буфере кадра. Многие изображения содержат огромное количество прозрачных пикселей. Вызов фрагментного шейдера для таких пикселей часто является бессмысленным, так как прозрачных пиксель при смешивании никак не повлияет на цвет на экране.
     Эти размышления приводят к одному из способов оптимизации: создание полигонального меша для изображения таким образом, чтобы минимизировать число вершин и пустых пикселей, занимаемых площадью меша.
+    %МБ ВСТАВИТЬ КАРТИНКУ ГРАФИЧЕСКОГО ПАЙПЛАЙНА%
 
     \begin{figure}[H]
         \centering
@@ -74,6 +86,118 @@
     Генетический алгоритм\cite{JAKOBS1996165} -- это эвристический алгоритм поиска, используемый для решения задач оптимизации и моделирования путём случайного подбора, комбинирования и вариации искомых параметров с использованием механизмов, аналогичных естественному отбору в природе.
 
     К сожалению, результаты прочитанных статей не удовлетворяют нужды упаковки текстур в атласы, поэтому данная работа предлагает собственную реализацию Memetic algorithm -- расширение генетического алгоритма, которое использует локальный поиск для уменьшения вероятности преждевременной сходимости. Разработанный алгоритм способен упаковывать изображения, на которых находятся множество разрозненных объектов с дырами.
+
+    \section{Алгоритмы, структуры данных и математические методы}
+    \subsection{Пайплайн полигональной упаковки}
+    \begin{itemize}
+        \item Трассировка контура изображений;
+        \item Аппроксимация полученных контуров;
+        \item Упаковка полигональных изображений в текстурные атласы.
+    \end{itemize}
+    \subsection{Трассировка контура}
+    Алгоритмы выделения контура можно разделить на 3 типа: обход попиксельно, обход повершинно, run-data.
+    \subsubsection{Обход попиксельно}
+    Метод выделения контура обходом попиксельно начинает с какого-либо стартового пикселя и пиксель за пикселем обходит контур изображения предопределенным образом, а затем сохраняет их координаты в памяти в соответствии с порядком трассировки. Наиболее известные алгоритмы обхода контура попиксельно: Moore-neighbor tracing\cite{MoorNeighbor}, radial sweep\cite{RadialSweep} и алгоритм Theo Pavlidis\cite{TheoPavlidis}.
+    \subsubsection{Обход повершинно}
+    Метод выделения контура обходом повершинно отличается от обхода попиксельно лишь тем, что обход осуществляется по границам пикселя.
+    \subsubsection{Run-data}
+    Run-data методы выделения контура проходят по изображению сканирующей линией оставляя определенные метки на встреченном граничном пикселе. Далее по расставленным меткам восстанавливается контур изображения. Примеры методов этой группы: run-type direction code\cite{Miyatake1997}, методы, основанные на PXY таблице\cite{Shoji}. Отличительной особенностью run-data методов является возможность выделения внешних и внутренних контуров, сохраняя иерархию. Так же способ обхода изображения в некоторых алгоритмах позволяет не держать в памяти изображение целиком.
+
+    Было решено выбрать алгоритм именно из этой группы методов, так как необходимо выделять дырки на объектах. За основу был взят алгоритм Suzuki Satoshi \cite{SuzukiAlgorithm}, использующийся в библиотеке OpenCV. Алгоритм способен построить иерархию контуров и типизировать их на границы и дыры.
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}[t]{.49\linewidth}
+            \includegraphics[scale=0.4]{images/SuzukiExample_upscaled.png}
+            \caption{Изображение}
+        \end{subfigure}
+        \begin{subfigure}[t]{.49\linewidth}
+            \includegraphics[scale=0.4]{images/SuzukiExample_contours_upscaled.png}
+            \caption{Контуры изображения}
+        \end{subfigure}
+        \begin{subfigure}[t]{.99\linewidth}
+            \centering
+            \includegraphics[scale=0.7]{images/SuzukiExample_hierarchy.png}
+            \caption{Иерархия контуров}
+        \end{subfigure}
+        \caption{Пример работы алгоритма Suzuki Satoshi}
+    \end{figure}
+
+    Алгоритм оперирует с дискретными координатами пикселей, а в компьютерной графике UV координаты это непрерывные вещественные числа. Такое представление контура создает некоторые проблемы.
+
+    Во-первых, может получится контур с самопересечениями, которые нетривиально разрешить. На FIG № изображены примеры контуров с самопересечением. Красным обозначены вершины, которые алгоритм посещает дважды.
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}[t]{.49\linewidth}
+            \centering
+            \includegraphics[scale=0.2]{images/SelfIntersectingContour1.png}
+            \caption{Изображение}
+        \end{subfigure}
+        \begin{subfigure}[t]{.49\linewidth}
+            \centering
+            \includegraphics[scale=0.4]{images/SelfIntersectingContour2.png}
+            \caption{Контуры изображения}
+        \end{subfigure}
+        \caption{Пример работы алгоритма Suzuki Satoshi}
+    \end{figure}
+
+    Во-вторых, некоторые пиксели при отрисовке будут обрезаны, т.к. дискретные координаты пикселя в прямой интерпретации в качестве UV координат будут являются координатами левого верхнего угла пикселя. В таком случае, нижние и правые пиксели просто не будут учтены при отрисовке.
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}[t]{.33\linewidth}
+            \centering
+            \includegraphics[scale=0.2]{images/SuzukiExample2.png}
+            \caption{Изображение}
+        \end{subfigure}
+        \begin{subfigure}[t]{.33\linewidth}
+            \centering
+            \includegraphics[scale=0.2]{images/SuzukiExample2_uvs.png}
+            \caption{Контуры изображения + UV координаты}
+        \end{subfigure}
+        \begin{subfigure}[t]{.32\linewidth}
+            \centering
+            \includegraphics[scale=0.2]{images/SuzukiExample2_wanted_uvs.png}
+            \caption{Контур изображения и желаемые UV координаты}
+        \end{subfigure}
+        \caption{Пример работы алгоритма Suzuki Satoshi}
+    \end{figure}
+
+    Для решения данных проблем был разработан алгоритм, который превращает попиксельный контур в повершинный.
+    \begin{algo}[H]
+        \setstretch{1}
+        \caption{Pixel contour to vertex contour}
+        \begin{algorithmic}[1]
+            \Procedure{ToVertexContour}{$contour, type$}
+                \State $vertices$ $=$ $[]$
+                \State $prevTexel$ $=$ $contour$$[0]$
+                \If{$type == Hole$}
+                    \State $verticies.Add(position)$
+                \EndIf
+                \State $position$ $=$ $type$ $==$ $Outer$ $?$
+                \State $prevTexel$ $:$
+                \State $NextCWVertex(prevTexel, NextCWVertex(prevTexel, prevTexel))$
+                \For{$i = 1$ \textbf{to} $contour.Size$}
+                    \State $currentTexel = contour[i]$
+                    \State $position = TracePixel(prevTexel, currentTexel, position, vertices)$
+                    \State $prevTexel = currentTexel$
+                \EndFor
+                \State $TracePixel(prevTexel, contour[0], position, vertices)$
+                \State \textbf{return} $vertices$
+            \EndProcedure
+            \Procedure{TracePixel}{$prevTexel, texel, position, vertices$}
+                \Do
+                    \State $position = NextCWVertex(prevTexel, position)$
+                    \State $vertices.Add(position)$
+                \DoWhile { $!IsVertexOf(texel, position)$ }
+                \State \textbf{return} $position$
+            \EndProcedure
+        \end{algorithmic}
+    \end{algo}
+
+    Функции NextCCWVertex(texel, vertex) и NextCWVertex(texel, vertex) возвращают следующую вершину текселя против и по часовой соответственно. IsVertexOf(texel, vertex) возвращает true, если вершина принадлежит текселю.
+
+    Для того, чтобы снизить количество вершин перед следующим этапом обработки изображения, контуры подвергаются первичной аппроксимации. Самым очевидным способом аппроксимации контура является удаление вершин лежащих на одной прямой. Также существуют алгоритмы упрощения цифровых кривых. В данной работе был реализован алгоритм Teh-Chin\cite{TehChin} c $L1$ и $k\cos$ метриками.
     \newpage
     \bibliographystyle{ugost2008ls}
     \bibliography{references}
