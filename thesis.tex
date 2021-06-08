@@ -235,16 +235,15 @@
         \setstretch{1}
         \caption{Meta-algorithm for a set of polygons approximation}
         \begin{algorithmic}[1]
-            \Procedure{ApproximatePolygons}{$polygons, hierarchy, frameRect$}
-                \State $minExtractor, topology, frame = $
-                \State $Initialize(polygons, hierarchy, frameRect)$
-                \While {Termination Condition is not achieved}
-                    \If {$!TryApproximate(\cdots)$ and $!TryMerge(\cdots)$}
+            \State $frame$ is a tree of polygons represented as DCELS
+            \State $topology$ is a constrained Delaunay triangulation
+            \State $minExtractor$ is a BST containing vertices sorted by transformation cost
+            \While {Termination Condition is not achieved}
+                \If {$!TryApproximate\left(\right)$ and $!TryMerge\left(\right)$}
                     \State \textbf{break}
-                    \EndIf
-                \EndWhile
-                \State \textbf{return} $RetrieveImage(\cdots)$
-            \EndProcedure
+                \EndIf
+            \EndWhile
+            \State \textbf{return} $RetrieveImage()$
         \end{algorithmic}
     \end{algo}
 
@@ -337,26 +336,24 @@
         \caption{Retrieve image mesh}
         \begin{algorithmic}[1]
             \State $used \gets \emptyset$
-            \State $faceList \gets []$
-            \State $polygonToFaceIndecies, sideToPolygon \gets Precalculate()$
-            \Procedure{RetrieveMesh}{$edge, faceIndecies, faceList$}
-                \If{$faceIndecies \neq null$} \Comment{Means inside a polygon}
-                    \State $faceIndecies.Add(faceList.Count)$
-                    \State $faceList.Add(edge.ToFace())$
-                    \State $current \gets edge.Next$
-                    \While{$current \neq edge$}
-                        \If{$current.Twin \neq null \; \textbf{and} \; used \cap current != \emptyset$ }
-                            \State $used \gets used \cup current$
-                            \State $twin \gets current.Twin$
-                            \State $fis \gets faceIndecies$
-                            \If{$twin.IsConstrained$}
-                                \State $polygon \gets sideToPolygon[edge]$ \Comment{returns polygon or null}
-                                \State $fis \gets polygonToFaceIndecies[polygon]$
-                            \EndIf
-                            \State $RetrieveMesh(twin, fis, faceList)$
-                        \EndIf
-                    \EndWhile
+            \State $faceList \gets []$ a list of indices triplets
+            \Procedure{RetrieveMesh}{$edge, faceIndices, faceList$}
+                \If{$faceIndices \neq null$} \Comment{Means inside a polygon}
+                    \State $faceIndices \gets faceIndices \bigcup \left|faceList\right|$
+                    \State $faceList \gets faceList \bigcup FaceFrom\left(edge\right)$
                 \EndIf
+                \State $current \gets edge.Next$
+                \While{$current \neq edge$} \Comment{Recursively call to other sides}
+                    \If{$current.Twin \neq null \; \textbf{and} \; used \cap current != \emptyset$ }
+                        \State $used \gets used \cup current$
+                        \State $twin \gets current.Twin$
+                        \State $fis \gets faceIndices$
+                        \If{$twin.IsConstrained$} \Comment{We enter or leave polygon}
+                            \State $fis \gets $ face indices that correspond to entering polygon or null if leaving
+                        \EndIf
+                        \State $RetrieveMesh(twin, fis, faceList)$
+                    \EndIf
+                \EndWhile
                 \State $current \gets current.Next$
             \EndProcedure
         \end{algorithmic}
