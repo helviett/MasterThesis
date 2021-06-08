@@ -182,34 +182,48 @@
         \setstretch{1}
         \caption{Pixel contour to vertex contour}
         \begin{algorithmic}[1]
-            \Procedure{ToVertexContour}{$contour, type$}
-                \State $vertices$ $=$ $[]$
-                \State $prevTexel$ $=$ $contour$$[0]$
-                \If{$type == Hole$}
-                    \State $verticies.Add(position)$
-                \EndIf
-                \State $position$ $=$ $type$ $==$ $Outer$ $?$
-                \State $prevTexel$ $:$
-                \State $NextCWVertex(prevTexel, NextCWVertex(prevTexel, prevTexel))$
-                \For{$i = 1$ \textbf{to} $contour.Size$}
-                    \State $currentTexel = contour[i]$
-                    \State $position = TracePixel(prevTexel, currentTexel, position, vertices)$
-                    \State $prevTexel = currentTexel$
-                \EndFor
-                \State $TracePixel(prevTexel, contour[0], position, vertices)$
-                \State \textbf{return} $vertices$
-            \EndProcedure
-            \Procedure{TracePixel}{$prevTexel, texel, position, vertices$}
-                \Do
-                    \State $position = NextCWVertex(prevTexel, position)$
-                    \State $vertices.Add(position)$
-                \DoWhile { $!IsVertexOf(texel, position)$ }
-                \State \textbf{return} $position$
-            \EndProcedure
+            \State $C$ is an ordered countour
+            \State $p \gets C_0$ is a current position\textbackslash vertex
+            \State $texel \gets C_0$ is a current texel coordinates (correspond to texel center)
+            \State $TraceTexel$ traces all vertices of $texel$ in a CCW order until the vertex of $nextTexel$ is met
+            \For{$i$ \textbf{from} 1 \textbf{to} $\left|C\right| - 1$}
+                \State $nextTexel \gets C_i$
+                \State $p \gets TraceTexel\left(p, texel, nextTexel\right)$
+                \State $texel \gets nextTexel$
+            \EndFor
+            \State $TraceTexel\left(texel, C_0, p\right)$
+            \State Resulting vertex contour consists of all traced vertices
         \end{algorithmic}
     \end{algo}
 
-    Функции NextCCWVertex(texel, vertex) и NextCWVertex(texel, vertex) возвращают следующую вершину текселя против и по часовой соответственно. IsVertexOf(texel, vertex) возвращает true, если вершина принадлежит текселю.
+    Зная локальные координаты вершины относительно текселя, можно легко определить как принадлежность вершины к текселю, так и следующую вершину против часовой стрелки. Для перехода к локальным координатам, очевидно, нужно просто отнять координаты текселя. Вершина принадлежит текселю, если локальные координаты относительно текселя удовлетворяют неравенству $ 0 \leq x, y \leq 1$.
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}[t]{.49\linewidth}
+            \centering
+            \includegraphics[scale=0.8]{images/texel_vertex_absolute.png}
+            \caption{Абсолютные координаты}
+        \end{subfigure}
+        \begin{subfigure}[t]{.49\linewidth}
+            \centering
+            \includegraphics[scale=0.8]{images/texel_vertex_local.png}
+            \caption{Локальные координаты относительно текселя $\left(1, 2\right)$}
+        \end{subfigure}
+        \caption{Переход к локальным координатам}
+    \end{figure}
+
+    Переход к следующей вершине против часовой стрелки может осуществляться с помощью простой табличной функции:
+
+    \begin{fefutable}[H]{|c|c|c|}{Функция следющей вершины против часовой стрелки}
+        \hline
+        $x\textbackslash y$& $0$ & $1$\\
+        \hline
+        $0$ & $\left(0, 1\right)$ & $\left(1, 1\right)$\\
+        \hline
+        $1$ & $\left(0, 0\right)$ & $\left(1, 0\right)$\\
+        \hline
+    \end{fefutable}
 
     Для того, чтобы снизить количество вершин перед следующим этапом обработки изображения, контуры подвергаются первичной аппроксимации. Самым очевидным способом аппроксимации контура является удаление вершин лежащих на одной прямой. Также существуют алгоритмы упрощения цифровых кривых. В данной работе был реализован алгоритм Teh-Chin\cite{TehChin} c $L1$ и $k\cos$ метриками.
 
