@@ -8,14 +8,22 @@
 \usepackage{float}
 \usepackage{caption}
 \usepackage{newfloat}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{multirow}
 
 \graphicspath{{images/}}
-
+\newenvironment{algo}[1][]
+  {\begin{algorithm}[#1]
+     \selectlanguage{english}
+     \floatname{algorithm}{Алгоритм}
+  }
+  {\end{algorithm}}
 \DeclareMathOperator{\sech}{sech}
 \setsansfont{Fira Sans}
 \title{Полигонизация текстур и упаковка полигональных текстур в атлас}
 \author[Терехов Д.Е.]{Студент группы М9119-09.04.01ИИБД Терехов Дмитрий Евгеньевич\\
-Консультант:\\
+Руководитель:\\
 Старший преподаватель кафедры информатики, математического и компьютерного моделирования\\
 Александр Сергеевич Кленин}
 \date{23 февраля 2021}
@@ -27,33 +35,6 @@
     \begin{frame}[fragile]
         \titlepage
         \thispagestyle{empty}
-    \end{frame}
-    \begin{frame}
-        \frametitle{Студия "Game Forest"}
-        \begin{figure}[H]
-            \centering
-            \begin{subfigure}[l]{0.50\linewidth}
-                \centering
-                \includegraphics[scale=0.15]{GAMEFOREST.png}
-            \end{subfigure}
-            \begin{subfigure}{0.49\linewidth}
-                \begin{subfigure}{\linewidth}
-                    \centering
-                    \includegraphics[scale=0.15]{TSD.jpg}
-                \end{subfigure}
-                \begin{subfigure}{\linewidth}
-                    \centering
-                    \includegraphics[scale=0.260]{GD.jpg}
-                \end{subfigure}
-            \end{subfigure}
-        \end{figure}
-    \end{frame}
-    \begin{frame}
-        \frametitle{Игровой движок Citrus}
-        \begin{figure}
-            \centering
-            \includegraphics[width=\linewidth, height=.9\textheight, keepaspectratio]{CitrusArchitecture.png}
-        \end{figure}
     \end{frame}
     \begin{frame}
         \frametitle{Упаковка текстур в атлас}
@@ -98,6 +79,45 @@
         Алгоритм Suzuki Satoshi %\cite{SuzukiAlgorithm}
         \begin{figure}[H]
             \centering
+            \begin{subfigure}[t]{.49\linewidth}
+                \includegraphics[scale=0.25]{images/SuzukiExample_contours_upscaled.png}
+            \end{subfigure}
+            \begin{subfigure}[t]{.49\linewidth}
+                \centering
+                \includegraphics[scale=0.4]{images/SuzukiExample_hierarchy.png}
+            \end{subfigure}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Трассировка контура. Pixels to Vertices}
+        Проблемы пиксельного контура:
+        \begin{itemize}
+            \item Неразрешимые самопересечения
+            \item Отсечение правых и нижних границ
+        \end{itemize}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.25]{SelfIntersectingContour1.png}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Трассировка контура. Pixels to Vertices}
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}[l]{0.50\linewidth}
+                \centering
+                \includegraphics[scale=0.25]{SuzukiExample2_uvs.png}
+            \end{subfigure}
+            \begin{subfigure}{0.49\linewidth}
+                \centering
+                \includegraphics[scale=0.25]{SuzukiExample2_wanted_uvs.png}
+            \end{subfigure}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Трассировка контура. Первичная аппроксимация}
+        \begin{figure}[H]
+            \centering
             \begin{subfigure}[l]{0.50\linewidth}
                 \centering
                 \includegraphics[scale=2]{donutpixel_contour_none.png}
@@ -110,11 +130,9 @@
     \end{frame}
     \begin{frame}
         \frametitle{Аппроксимация контура}
-        Стадии аппроксимации:
         \begin{itemize}
             \item Применение минимальных валидных преобразований
             \item Мердж полигонов
-            \item Удаление дыр
         \end{itemize}
         \begin{figure}[H]
             \centering
@@ -132,85 +150,181 @@
         \end{figure}
     \end{frame}
     \begin{frame}
-        \frametitle{Аппроксимация контура. Типы преобразований}
+        \frametitle{Аппроксимация контура}
+        Стоимость преобразования -- добавочная площадь
         \begin{itemize}
-            \item Удаление вогнутого угла для границы или выпуклого для дырки
-            \item Замена вершины пересечением двух сторон
-            \item Удаление треугольной дырки
+            \item Дерево полигонов с корнем в рамке изображения
+            \item Триангуляция Делоне с ограничениями для проверки преобразований
+            \item BST для поиска вершины с минимальной стоимостью преобразования
         \end{itemize}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Аппроксимация контура. Преобразования}
         \begin{figure}[H]
             \centering
-            \begin{subfigure}[H]{\linewidth}
+            \begin{subfigure}[t]{\linewidth}
                 \centering
-                \includegraphics[scale=0.9]{images/convex_angle.png}
-                \caption{Удаление вогнутого угла}
+                \includegraphics[scale=0.8]{images/earcut.png}
             \end{subfigure}
-            \vskip .5cm
-            \begin{subfigure}[H]{\linewidth}
+            \begin{subfigure}[b]{\linewidth}
                 \centering
-                \includegraphics[scale=0.9]{images/sides_intersection.png}
-                \caption{Пересечение 2 сторон}
+                \includegraphics[scale=0.8]{images/bendneighbor.png}
             \end{subfigure}
         \end{figure}
     \end{frame}
     \begin{frame}
-        \frametitle{Аппроксимация контура. Мердж полигонов}
+        \frametitle{Аппроксимация контура. Преобразования}
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.8\linewidth, keepaspectratio]{merge.png}
+            \includegraphics[scale=0.8]{images/remove_triangular_hole.png}
         \end{figure}
     \end{frame}
     \begin{frame}
-        \frametitle{Аппроксимация контура. Удаление дыр}
+        \frametitle{Аппроксимация контура. Преобразования}
         \begin{figure}[H]
-            \centering
-            \includegraphics[width=0.8\linewidth, keepaspectratio]{remove_hole.png}
+            \begin{subfigure}[t]{\linewidth}
+                \centering
+                \includegraphics[scale=0.8]{images/bendneighbor2.png}
+            \end{subfigure}
+            \begin{subfigure}[t]{\linewidth}
+                \centering
+                \includegraphics[scale=0.8]{images/bendoutboth.png}
+            \end{subfigure}
         \end{figure}
     \end{frame}
     \begin{frame}
-        \frametitle{Аппроксимация контура. Детали реализации}
-        Триангуляция Делоне -- бекенд для всех операций
+        \frametitle{Аппроксимация контура. Мердж}
         \begin{figure}[H]
             \centering
-            \includegraphics[width=0.7\linewidth, keepaspectratio]{DelaunayAndVoronoi.png}
+            \begin{subfigure}[t]{\linewidth}
+                \centering
+                \includegraphics[scale=0.8]{images/polygonmerge.png}
+            \end{subfigure}
+            \begin{subfigure}[t]{\linewidth}
+                \centering
+                \includegraphics[scale=0.8]{images/polygonmerge2.png}
+            \end{subfigure}
         \end{figure}
     \end{frame}
     \begin{frame}
         \frametitle{Генерация меша}
-        Winding number (non-zero filling rule)
+        DFS. Структурные ребра это вход в полигон или выход из него
         \begin{figure}[H]
             \centering
             \includegraphics[scale=1.5]{donutpixel_mesh.png}
         \end{figure}
     \end{frame}
     \begin{frame}
-        \frametitle{Упаковка в атлас}
-        Генетический алгоритм с локальным поиском (memetic algorithm)
-        Методы локального поиска:
-        \begin{itemize}
-            \item Вставить полигон в пустое место
-            \item Вставить полигон в дырку
-            \item Физика
-        \end{itemize}
+        \frametitle{Упаковка в атлас. Генетический алгоритм}
+        \begin{center}
+            \begin{algorithmic}[1]
+                \State $INITIALIZE$ population with random candidate solution
+                \State $EVALUATE$ each candidate
+                \While{$TERMINATION\; CONDITION$ \textbf{is not} satisfied}
+                    \State $SELECT$ parents
+                    \State $RECOMBINE$ pairs of parents
+                    \State $MUTATE$ offspring
+                    \State $EVALUATE$ new candidates
+                    \State $SELECT$ individuals for the next generation
+                \EndWhile
+            \end{algorithmic}
+        \end{center}
     \end{frame}
     \begin{frame}
-        \frametitle{Упаковка в атлас}
-        \begin{figure}
+        \frametitle{Генетический алгоритм. Репрезентация особей}
+        \begin{figure}[H]
             \centering
-            \includegraphics[width=\linewidth, height=.9\textheight, keepaspectratio]{PackExample.png}
+            \includegraphics[scale=0.8]{Image.png}
         \end{figure}
     \end{frame}
     \begin{frame}
-        \frametitle{План работ}
+        \frametitle{Генетический алгоритм. Репрезентация особей}
         \begin{itemize}
-            \item Интеграция в Citrus (в процессе)
-            \item Выработать критерий остановки аппроксимации
-            \item Разработать алгоритм подбора оптимального размера атласа
+            \item Массив троек (X, Y, Angle) для каждого ImageObject
+            \item Массив булевых флагов присутствия в атласе для каждого Image
         \end{itemize}
     \end{frame}
-    % \begin{frame} %[allowframebreaks]
-    %     \frametitle{Список литературы}
-    %     \bibliographystyle{ugost2008ls}
-    %     \bibliography{references}
-    % \end{frame}
+    \begin{frame}
+        \frametitle{Генетический алгоритм. Операторы рекомбинации}
+        Мутации:
+        \begin{itemize}
+            \item Creep
+            \item Reset
+        \end{itemize}
+        One Point Crossover
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=1]{OnePointCrossover.png}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Генетический алгоритм. Выбор родителей}
+        Stochastic Universal Sampling:
+        \begin{center}
+            \scalebox{0.80}{
+                \begin{minipage}{\linewidth}
+                    \begin{algorithmic}[1]
+                        \State $a$ is cumulative probability distribution
+                        \State $m$ is number of parents we want to selects
+                        \State $current \gets 1$
+                        \State $i \gets 1$
+                        \State $r \gets$ uniformly random from $\left[0, 1 / m\right]$
+                        \While{$current \leq m$}
+                            \While{$r \leq a_i$}
+                                \State $parents_i \gets popoluation_i$
+                                \State $r \gets r + 1 / m$
+                                \State $current \gets current + 1$
+                            \EndWhile
+                            \State $i \gets i + 1$
+                        \EndWhile
+                    \end{algorithmic}
+                \end{minipage}
+            }
+        \end{center}
+        Экспоненциальный ранг:
+        \[P_{exp}\left(i\right) = \frac{1 - e^{-i}}{c}\]
+    \end{frame}
+    \begin{frame}
+        \frametitle{Генетический алгоритм. Отбор выживших}
+        \begin{itemize}
+            \item Elitism
+            \item Age based
+            \item GENITOR -- замещение худших
+        \end{itemize}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Генетический алгоритм. Функция оценки}
+        \[
+            F\left(individual\right) = a \cdot S_{intersection} + b \cdot S_{outside\;ledges} + c \cdot missing \cdot S_{avg}
+        \]
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.25]{ledges.png}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Генетический алгоритм. Функция оценки}
+        \[
+            S_{intersection} = \sum\limits_{0}^{n - 1}S\left(P_i\right) - S\left(\bigcup\limits_{0}^{n - 1}P_i\right)
+        \]
+        Clipper library by Angus Johnson (extended Vatti)
+    \end{frame}
+    \begin{frame}
+        \frametitle{Memetic algorithm}
+        \begin{itemize}
+            \item Hole filler
+            \item Physics (Box2D)
+        \end{itemize}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Генетический алгоритм. Пример работы}
+        \begin{table}[ht]
+            \begin{center}
+            \begin{tabular}{cc}
+                \multirow{2}{*}[2cm]{\includegraphics[scale=0.08]{polygonal.png}}&\includegraphics[scale=0.08]{rect_0.png}\\
+                &\includegraphics[scale=0.08]{rect_1.png}
+            \end{tabular}
+            \end{center}
+        \end{table}
+    \end{frame}
 \end{document}
