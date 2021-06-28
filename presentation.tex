@@ -26,7 +26,7 @@
 Руководитель:\\
 Старший преподаватель кафедры информатики, математического и компьютерного моделирования\\
 Александр Сергеевич Кленин}
-\date{23 февраля 2021}
+\date{26 июня 2021}
 \usetheme[progressbar=frametitle, numbering=fraction]{metropolis}
 \makeatletter
         \setlength{\metropolis@progressinheadfoot@linewidth}{2pt}
@@ -37,22 +37,24 @@
         \thispagestyle{empty}
     \end{frame}
     \begin{frame}
-        \frametitle{Упаковка текстур в атлас}
-        \begin{itemize}
-            \item Жадный алгоритм
-            \item Генерация текстурного меша, полигональная упаковка методами машинного обучения
-        \end{itemize}
-        \begin{figure}
+        \frametitle{Отрисовка изображения}
+        \begin{figure}[H]
             \centering
-            \begin{subfigure}[H]{\linewidth}
-                \centering
-                \includegraphics[width=.59\linewidth]{RectangularPacking.png}
-            \end{subfigure}
-            \vskip .5cm
-            \begin{subfigure}[H]{\linewidth}
-                \centering
-                \includegraphics[width=.59\linewidth]{PolygonalPacking.png}
-            \end{subfigure}
+            \includegraphics[scale=0.6]{spine_mesh.png}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Отрисовка изображения}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{graphicspipeline.png}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Текстурный атлас}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.2]{texture_atlas_example.png}
         \end{figure}
     \end{frame}
     \begin{frame}
@@ -61,7 +63,7 @@
 
         Задачи:
         \begin{itemize}
-            \item Разработать алгоритм полигонизации текстур
+            \item Разработать алгоритм генерации текстурного меша
             \item Разработать алгоритм упаковки полигональных текстур в атлас
         \end{itemize}
     \end{frame}
@@ -75,17 +77,38 @@
         \end{itemize}
     \end{frame}
     \begin{frame}
+        \frametitle{Меш и полигоны}
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}[t]{.49\linewidth}
+                \includegraphics[scale=1.5]{donutpixel_mesh.png}
+            \end{subfigure}
+            \begin{subfigure}[t]{.49\linewidth}
+                \centering
+                \includegraphics[scale=1.5]{donutpixel_approx_mid.png}
+            \end{subfigure}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
         \frametitle{Трассировка контура}
         Алгоритм Suzuki Satoshi %\cite{SuzukiAlgorithm}
         \begin{figure}[H]
             \centering
             \begin{subfigure}[t]{.49\linewidth}
-                \includegraphics[scale=0.25]{images/SuzukiExample_contours_upscaled.png}
+                \centering
+                \includegraphics[scale=0.25]{SuzukiExample_upscaled.png}
             \end{subfigure}
             \begin{subfigure}[t]{.49\linewidth}
                 \centering
-                \includegraphics[scale=0.4]{images/SuzukiExample_hierarchy.png}
+                \includegraphics[scale=0.25]{SuzukiExample_contours_upscaled.png}
             \end{subfigure}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Трассировка контура. Иерархия}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.65]{SuzukiExample_hierarchy.png}
         \end{figure}
     \end{frame}
     \begin{frame}
@@ -131,8 +154,8 @@
     \begin{frame}
         \frametitle{Аппроксимация контура}
         \begin{itemize}
-            \item Применение минимальных валидных преобразований
-            \item Мердж полигонов
+            \item Применение минимальных по стоимости преобразований
+            \item Слияение полигонов
         \end{itemize}
         \begin{figure}[H]
             \centering
@@ -148,15 +171,6 @@
                 \includegraphics[scale=1.5]{donutpixel_approx_end.png}
             \end{subfigure}
         \end{figure}
-    \end{frame}
-    \begin{frame}
-        \frametitle{Аппроксимация контура}
-        Стоимость преобразования -- добавочная площадь
-        \begin{itemize}
-            \item Дерево полигонов с корнем в рамке изображения
-            \item Триангуляция Делоне с ограничениями для проверки преобразований
-            \item BST для поиска вершины с минимальной стоимостью преобразования
-        \end{itemize}
     \end{frame}
     \begin{frame}
         \frametitle{Аппроксимация контура. Преобразования}
@@ -193,7 +207,7 @@
         \end{figure}
     \end{frame}
     \begin{frame}
-        \frametitle{Аппроксимация контура. Мердж}
+        \frametitle{Аппроксимация контура. Слияние}
         \begin{figure}[H]
             \centering
             \begin{subfigure}[t]{\linewidth}
@@ -203,6 +217,38 @@
             \begin{subfigure}[t]{\linewidth}
                 \centering
                 \includegraphics[scale=0.8]{images/polygonmerge2.png}
+            \end{subfigure}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Аппроксимация контура}
+        Стоимость преобразования -- добавочная площадь
+        \begin{itemize}
+            \item Дерево полигонов с корнем в рамке изображения
+            \item Триангуляция Делоне с ограничениями для проверки преобразований
+            \item BST для поиска вершины с минимальной стоимостью преобразования
+        \end{itemize}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Аппроксимация контура. Алгоритм слияния}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.3]{visibility_polygon.png}
+        \end{figure}
+    \end{frame}
+    \begin{frame}
+        \frametitle{Аппроксимация контура. Алгоритм слияния}
+        Triangular Expansion $O\left(nh\right)$ нахождение полигона видимости
+        $O\left(\log_2\left|V\right|\right)$ на запрос нахождения точки в полигоне видимости
+        \begin{figure}[H]
+            \centering
+            \begin{subfigure}[t]{0.49\linewidth}
+                \centering
+                \includegraphics[scale=0.4]{visibility_polygon_prev_vertex.png}
+            \end{subfigure}
+            \begin{subfigure}[t]{0.49\linewidth}
+                \centering
+                \includegraphics[scale=0.4]{visibility_polygon_current_vertex.png}
             \end{subfigure}
         \end{figure}
     \end{frame}
