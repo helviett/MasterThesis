@@ -93,12 +93,14 @@
     \begin{figure}[H]
         \centering
         \begin{subfigure}[c]{.49\linewidth}
-            \includegraphics{images/Thunder_approx.png}
+            \centering
+            \includegraphics{images/katana_rect.png}
             \caption{Прямоугольный меш с 4 вершинами}
         \end{subfigure}
         \begin{subfigure}[c]{.49\linewidth}
-            \includegraphics{images/Thunder_approx.png}
-            \caption{Полигональный меш с 10 вершинами}
+            \centering
+            \includegraphics{images/katana_15v.png}
+            \caption{Полигональный меш с 15 вершинами}
         \end{subfigure}
     \end{figure}
 
@@ -109,12 +111,14 @@
     \begin{figure}[H]
         \centering
         \begin{subfigure}[c]{.49\linewidth}
-            \includegraphics{images/Thunder_approx.png}
-            \caption{Картинка с мешем}
+            \centering
+            \includegraphics{images/katana_15v.png}
+            \caption{Меш}
         \end{subfigure}
         \begin{subfigure}[c]{.49\linewidth}
-            \includegraphics{images/Thunder_approx.png}
-            \caption{Картинка аля меш == полигон}
+            \centering
+            \includegraphics{images/katana_15v_polygon.png}
+            \caption{Полигон}
         \end{subfigure}
     \end{figure}
 
@@ -122,8 +126,8 @@
 
     \begin{figure}[H]
         \centering
-        \includegraphics{images/Thunder_approx.png}
-        \caption{Картинка с контуром}
+        \includegraphics[scale=1.2]{images/donutpixel_contour_none.png}
+        \caption{Контур изображения}
     \end{figure}
 
     Полигоны, упрощенные алгоритмом упрощения кривых, могут нарушать свойство, изложенное выше. Также алгоритмы упрощения кривых не рассматривают задачу минимизации добавочной площади (или площади пустых пикселей). Их главным критерием качества является некая похожесть исходной кривой и упрощенной.
@@ -136,8 +140,8 @@
 
     \begin{figure}[H]
         \centering
-        \includegraphics{images/Thunder_approx.png}
-        \caption{Картинка примером Атласа}
+        \includegraphics[scale=0.25]{images/texture_atlas_example.png}
+        \caption{Текстурный атлас}
     \end{figure}
 
     Для того чтобы уменьшить размер текстур и соответственно ускорить их загрузку на GPU, в компьютерной графике применяют компрессию. Алгоритмы сжатия часто ставят ограничение на размеры текстур. Например, размеры должны быть степенью двойки или даже длина должна совпадать с шириной. В этом случае текстуры, не подходящие под ограничения, необходимо изменить, что плохо сказывается на качестве текстуры или на её размере, поэтому использовании компрессии целесообразно паковать текстуры в атлас.
